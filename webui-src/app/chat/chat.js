@@ -115,6 +115,12 @@ const Message = () => {
   };
 };
 
+const emojiList = [
+  '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', 
+  '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚',
+  '👍', '👎', '❤️', '👋', '🎉', '🔥', '👏', '🙏', '🤔', '💯'
+];
+
 const ChatLobbyModel = {
   currentLobby: {
     lobby_name: '...',
@@ -239,6 +245,75 @@ const ChatLobbyModel = {
         JSON.stringify(msg) +
         '}'
     );
+  },
+  sendAttachment(file, onsuccess) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target.result;
+      rs.rsJsonApiRequest(
+        '/rsmsgs/sendChatAttachment',
+        {},
+        () => {
+          onsuccess();
+        },
+        true,
+        {},
+        undefined,
+        () =>
+          '{"id":{"type": 3,"lobby_id":' +
+          m.route.param('lobby') +
+          '}, "attachment":' +
+          JSON.stringify(data) +
+          '}'
+      );
+    };
+    reader.readAsDataURL(file);
+  },
+  sendImage(file, onsuccess) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target.result;
+      rs.rsJsonApiRequest(
+        '/rsmsgs/sendChatImage',
+        {},
+        () => {
+          onsuccess();
+        },
+        true,
+        {},
+        undefined,
+        () =>
+          '{"id":{"type": 3,"lobby_id":' +
+          m.route.param('lobby') +
+          '}, "image":' +
+          JSON.stringify(data) +
+          '}'
+      );
+    };
+    reader.readAsDataURL(file);
+  },
+  sendSticker(file, onsuccess) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target.result;
+      rs.rsJsonApiRequest(
+        '/rsmsgs/sendChatSticker',
+        {},
+        () => {
+          onsuccess();
+        },
+        true,
+        {},
+        undefined,
+        () =>
+          '{"id":{"type": 3,"lobby_id":' +
+          m.route.param('lobby') +
+          '}, "sticker":' +
+          JSON.stringify(data) +
+          '}'
+      );
+    };
+    reader.readAsDataURL(file);
   },
   selected(info, selName, defaultName) {
     const currid = (ChatLobbyModel.currentLobby.lobby_id || { xstr64: m.route.param('lobby') })
@@ -434,7 +509,82 @@ const LayoutSingle = () => {
                 return false;
               }
             },
-          })
+          }),
+          m('.emojiContainer', [
+            m('button.chatButton', {
+              class: 'emojiButton',
+              title: 'Send emoji', // Tooltip for emoji button
+              onclick: () => {
+                const emojiPicker = document.querySelector('.emojiPicker');
+                emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
+              },
+            }, m('img', {
+               src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFslmHtBfi9P0a_0Ls9ukMnxMqwOYrSSFltNqafNWtF_cgz9h8f5tiSKv9jC2emgTl9Og&usqp=CAU", alt: 'Emoji'})), 
+            m('button.chatButton', {
+              class: 'attachButton',
+              title: 'Send attachments', // Tooltip for attach button
+              onclick: () => {
+                const attachmentInput = document.querySelector('.chatAttachment');
+                attachmentInput.click();
+              },
+            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ6k7KXoSJ7iY0HurPvwJsx_g59l6xS5ltOQ&s", alt: 'Attach' })),
+            m('input[type=file].chatAttachment', {
+              class: 'chatAttachment',
+              style: { display: 'none' },
+              onchange: (e) => {
+                const file = e.target.files[0];
+                ChatLobbyModel.sendAttachment(file, () => (e.target.value = ''));
+              },
+            }),
+            m('button.chatButton', {
+              class: 'attachImageButton',
+              title: 'Send images', // Tooltip for attach image button
+              onclick: () => {
+                const imageInput = document.querySelector('.chatImage');
+                imageInput.click();
+              },
+            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CL7x349Zm-bhbVmAOo_p5T7m9AdSkfGb0Q&s", alt: 'Attach Image' })), 
+            m('input[type=file].chatImage', {
+              class: 'chatImage',
+              style: { display: 'none' },
+              accept: ".jpg,.jpeg,.png,.gif,.tiff,.bmp,.svg", 
+              onchange: (e) => {
+                const file = e.target.files[0];
+                if (file && /\.(jpg|jpeg|png|gif|tiff|bmp|svg)$/i.test(file.name)) {
+                  ChatLobbyModel.sendImage(file, () => (e.target.value = ''));
+                } else {
+                  alert('Invalid file type. Please select an image file.');
+                  e.target.value = '';
+                }
+              },
+            }),
+            m('button.chatButton', {
+              class: 'attachStickers',
+              title: 'Send stickers', // Tooltip for attach sticker button
+              onclick: () => {
+                const stickerInput = document.querySelector('.chatSticker');
+                stickerInput.click();
+              },
+            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa2BFy825nwrflMIedj4w37yD5auVW2iVe3g", alt: 'Send Sticker', width: "20px", height: "20px" })), 
+            m('input[type=file].chatSticker', {
+              class: 'chatSticker',
+              style: { display: 'none' },
+              onchange: (e) => {
+                const file = e.target.files[0];
+                ChatLobbyModel.sendSticker(file, () => (e.target.value = ''));
+              },
+            }),
+          ]),
+          m('.emojiPicker', { class: 'emojiPicker', style: { display: 'none' } }, 
+            emojiList.map(emoji => 
+              m('span.emoji', {
+                onclick: () => {
+                  const textarea = document.querySelector('.chatMsg');
+                  textarea.value += emoji;
+                }
+              }, emoji)
+            )
+          ),
         ),
       ]),
   };

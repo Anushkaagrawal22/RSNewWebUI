@@ -162,3 +162,49 @@ textarea.chatMsg {
 .createDistantChat {
   margin-top: 1em;
 }
+
+.chatButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5em;
+  margin-left: 10px; /* Add some space between the buttons */
+}
+
+.attachButton img,
+.attachImageButton img {
+  width: 20px;
+  height: 20px;
+}
+
+.emojiButton img {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+}
+.emojiPicker {
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.emojiPicker .emoji {
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.emojiContainer {
+  display: flex;
+  justify-content: flex-start;
+  background-color: white;
+  // padding: 0px;
+  // border-top: 1px solid #ccc;
+}
