@@ -590,10 +590,13 @@ const LayoutSingle = () => {
             }),
             m('button.chatButton', {
               class: 'textFormatButton',
-              title: 'Change text format', // Tooltip for text format button
+              title: 'Change text font,size or color', // Tooltip for text format button
               onclick: () => {
+                console.log('Text format button clicked');
                 const textFormatPicker = document.querySelector('.textFormatPicker');
+                console.log('Before toggle:', textFormatPicker.style.display);
                 textFormatPicker.style.display = textFormatPicker.style.display === 'none' ? 'block' : 'none';
+                console.log('After toggle:', textFormatPicker.style.display);
               },
             }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwk0UXL-b5TnWB_OzttDO5HR844c5kOuX7Frmu9m3xf6DakgTqzErFoRVGNZxvCy37Sdw&usqp=CAU", alt: 'Text Format',height:'20px',width:'20px' })), // Added text format button with specified dimensions
             m('button.chatButton', {
