@@ -171,6 +171,7 @@ textarea.chatMsg {
   margin-left: 10px; /* Add some space between the buttons */
 }
 
+.sendButton img,
 .attachButton img,
 .attachImageButton img {
   width: 20px;
@@ -182,6 +183,7 @@ textarea.chatMsg {
   height: 20px;
   background-color: white;
 }
+
 .emojiPicker {
   position: absolute;
   bottom: 50px;
@@ -207,4 +209,29 @@ textarea.chatMsg {
   background-color: white;
   // padding: 0px;
   // border-top: 1px solid #ccc;
+}
+
+.textFormatPicker {
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.textFormatPicker label {
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.textFormatPicker select,
+.textFormatPicker input[type="number"],
+.textFormatPicker input[type="color"] {
+  margin-bottom: 10px;
 }

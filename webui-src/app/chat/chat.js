@@ -488,6 +488,10 @@ const Layout = () => {
 };
 
 const LayoutSingle = () => {
+  let currentFont = 'Arial';
+  let currentFontSize = '14px';
+  let currentColor = '#000000';
+
   return {
     oninit: () => ChatLobbyModel.loadLobby(m.route.param('lobby')),
     view: (vnode) =>
@@ -501,11 +505,21 @@ const LayoutSingle = () => {
           {},
           m('textarea.chatMsg', {
             placeholder: 'enter new message and press return to send',
+            style: {
+              fontFamily: currentFont,
+              fontSize: currentFontSize,
+              color: currentColor,
+            },
             onkeydown: (e) => {
               if (e.code === 'Enter') {
                 const msg = e.target.value;
                 e.target.value = ' sending ... ';
-                ChatLobbyModel.sendMessage(msg, () => (e.target.value = ''));
+                ChatLobbyModel.sendMessage(msg, () => {
+                  e.target.value = '';
+                  e.target.style.fontFamily = currentFont;
+                  e.target.style.fontSize = currentFontSize;
+                  e.target.style.color = currentColor;
+                });
                 return false;
               }
             },
@@ -519,7 +533,7 @@ const LayoutSingle = () => {
                 emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
               },
             }, m('img', {
-               src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFslmHtBfi9P0a_0Ls9ukMnxMqwOYrSSFltNqafNWtF_cgz9h8f5tiSKv9jC2emgTl9Og&usqp=CAU", alt: 'Emoji'})), 
+               src: "https://i.pinimg.com/736x/e4/47/1f/e4471fd12da05d58e102f8acee595162.jpg", alt: 'Emoji'})), 
             m('button.chatButton', {
               class: 'attachButton',
               title: 'Send attachments', // Tooltip for attach button
@@ -527,7 +541,7 @@ const LayoutSingle = () => {
                 const attachmentInput = document.querySelector('.chatAttachment');
                 attachmentInput.click();
               },
-            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ6k7KXoSJ7iY0HurPvwJsx_g59l6xS5ltOQ&s", alt: 'Attach' })),
+            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ6k7KXoSJ7iY0HurPvwJsx_g59l6xS5ltOQ&s", alt: 'Attach' })), // Ensure the path is correct
             m('input[type=file].chatAttachment', {
               class: 'chatAttachment',
               style: { display: 'none' },
@@ -543,11 +557,11 @@ const LayoutSingle = () => {
                 const imageInput = document.querySelector('.chatImage');
                 imageInput.click();
               },
-            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CL7x349Zm-bhbVmAOo_p5T7m9AdSkfGb0Q&s", alt: 'Attach Image' })), 
+            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CL7x349Zm-bhbVmAOo_p5T7m9AdSkfGb0Q&s", alt: 'Attach Image' })), // Ensure the path is correct
             m('input[type=file].chatImage', {
               class: 'chatImage',
               style: { display: 'none' },
-              accept: ".jpg,.jpeg,.png,.gif,.tiff,.bmp,.svg", 
+              accept: ".jpg,.jpeg,.png,.gif,.tiff,.bmp,.svg", // Restrict file types
               onchange: (e) => {
                 const file = e.target.files[0];
                 if (file && /\.(jpg|jpeg|png|gif|tiff|bmp|svg)$/i.test(file.name)) {
@@ -565,7 +579,7 @@ const LayoutSingle = () => {
                 const stickerInput = document.querySelector('.chatSticker');
                 stickerInput.click();
               },
-            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa2BFy825nwrflMIedj4w37yD5auVW2iVe3g", alt: 'Send Sticker', width: "20px", height: "20px" })), 
+            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa2BFy825nwrflMIedj4w37yD5auVW2iVe3g", alt: 'Send Sticker', width: "20px", height: "20px" })), // Added sticker button with specified dimensions
             m('input[type=file].chatSticker', {
               class: 'chatSticker',
               style: { display: 'none' },
@@ -574,17 +588,106 @@ const LayoutSingle = () => {
                 ChatLobbyModel.sendSticker(file, () => (e.target.value = ''));
               },
             }),
+            m('button.chatButton', {
+              class: 'textFormatButton',
+              title: 'Change text format', // Tooltip for text format button
+              onclick: () => {
+                const textFormatPicker = document.querySelector('.textFormatPicker');
+                textFormatPicker.style.display = textFormatPicker.style.display === 'none' ? 'block' : 'none';
+              },
+            }, m('img', { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwk0UXL-b5TnWB_OzttDO5HR844c5kOuX7Frmu9m3xf6DakgTqzErFoRVGNZxvCy37Sdw&usqp=CAU", alt: 'Text Format',height:'20px',width:'20px' })), // Added text format button with specified dimensions
+            m('button.chatButton', {
+              class: 'sendButton',
+              title: 'Send message', // Tooltip for send button
+              style: { marginLeft: 'auto' }, // Added margin-left: auto to send button
+              onclick: () => {
+                const textarea = document.querySelector('.chatMsg');
+                const msg = textarea.value;
+                textarea.value = ' sending ... ';
+                ChatLobbyModel.sendMessage(msg, () => {
+                  textarea.value = '';
+                  textarea.style.fontFamily = currentFont;
+                  textarea.style.fontSize = currentFontSize;
+                  textarea.style.color = currentColor;
+                });
+              },
+            }, m('img', {
+               src: "https://cdn-icons-png.flaticon.com/512/736/736110.png", alt: 'Send Message', width: "20px", height: "20px" })), // Added send button with specified dimensions
           ]),
-          m('.emojiPicker', { class: 'emojiPicker', style: { display: 'none' } }, 
+          m('.emojiPicker', { class: 'emojiPicker', style: { display: 'none', flexWrap: 'nowrap', overflowX: 'auto' } }, 
             emojiList.map(emoji => 
               m('span.emoji', {
                 onclick: () => {
                   const textarea = document.querySelector('.chatMsg');
                   textarea.value += emoji;
+                  textarea.style.fontFamily = currentFont;
+                  textarea.style.fontSize = currentFontSize;
+                  textarea.style.color = currentColor;
                 }
               }, emoji)
             )
           ),
+          m('.textFormatPicker', { class: 'textFormatPicker', style: { display: 'none' } }, [
+            m('label', 'Font:'),
+            m('select', {
+              onchange: (e) => {
+                currentFont = e.target.value;
+                const textarea = document.querySelector('.chatMsg');
+                textarea.style.fontFamily = currentFont;
+              }
+            }, [
+              m('option', { value: 'Arial' }, 'Arial'),
+              m('option', { value: 'Arial Black' }, 'Arial Black'),
+              m('option', { value: 'Verdana' }, 'Verdana'),
+              m('option', { value: 'Tahoma' }, 'Tahoma'),
+              m('option', { value: 'Trebuchet MS' }, 'Trebuchet MS'),
+              m('option', { value: 'Impact' }, 'Impact'),
+              m('option', { value: 'Times New Roman' }, 'Times New Roman'),
+              m('option', { value: 'Georgia' }, 'Georgia'),
+              m('option', { value: 'Garamond' }, 'Garamond'),
+              m('option', { value: 'Courier New' }, 'Courier New'),
+              m('option', { value: 'Brush Script MT' }, 'Brush Script MT'),
+              m('option', { value: 'Lucida Console' }, 'Lucida Console'),
+              m('option', { value: 'Lucida Sans' }, 'Lucida Sans'),
+              m('option', { value: 'Palatino Linotype' }, 'Palatino Linotype'),
+              m('option', { value: 'Book Antiqua' }, 'Book Antiqua'),
+              m('option', { value: 'Franklin Gothic Medium' }, 'Franklin Gothic Medium'),
+              m('option', { value: 'Comic Sans MS' }, 'Comic Sans MS'),
+              m('option', { value: 'Century Gothic' }, 'Century Gothic'),
+              m('option', { value: 'Segoe UI' }, 'Segoe UI'),
+              m('option', { value: 'Roboto' }, 'Roboto'),
+              m('option', { value: 'Open Sans' }, 'Open Sans'),
+              m('option', { value: 'Lato' }, 'Lato'),
+              m('option', { value: 'Montserrat' }, 'Montserrat'),
+              m('option', { value: 'Raleway' }, 'Raleway'),
+              m('option', { value: 'Poppins' }, 'Poppins'),
+              m('option', { value: 'Nunito' }, 'Nunito'),
+              m('option', { value: 'Oswald' }, 'Oswald'),
+              m('option', { value: 'Ubuntu' }, 'Ubuntu'),
+              m('option', { value: 'Fira Sans' }, 'Fira Sans'),
+              m('option', { value: 'Merriweather' }, 'Merriweather')
+            ]),
+            m('label', 'Size:'),
+            m('input[type=number]', {
+              min: 8,
+              max: 72,
+              value: 14,
+              onchange: (e) => {
+                currentFontSize = e.target.value + 'px';
+                const textarea = document.querySelector('.chatMsg');
+                textarea.style.fontSize = currentFontSize;
+              }
+            }),
+            m('label', 'Color:'),
+            m('input[type=color]', {
+              value: '#000000',
+              onchange: (e) => {
+                currentColor = e.target.value;
+                const textarea = document.querySelector('.chatMsg');
+                textarea.style.color = currentColor;
+              }
+            })
+          ])
         ),
       ]),
   };
