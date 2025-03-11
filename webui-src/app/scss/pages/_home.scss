@@ -44,14 +44,18 @@
       .rsId > p {
         margin-bottom: 0.5rem;
         color: $primary-retro-color;
+        font-weight: bold;
       }
       .retroshareID {
-        padding: 0.25rem;
-        @include flex($align: center);
-        justify-self: start;
-        font-size: 1.25rem;
-        border-radius: 4px;
-        background: transparentize($dark-color, 0.95);
+          padding: .25rem;
+          display: inline-flex;
+          padding: 5px 10px;
+          flex-grow: 1;
+          align-items: center;
+          width: 100%;
+          white-space: nowrap;
+          font-size: 1.25rem;
+          border-radius: 4px;
         & .textArea {
           padding: 0;
           width: 100%;

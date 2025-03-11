@@ -278,9 +278,10 @@ const Certificate = () => {
         m('.certificate', [
           m('.certificate__heading', [
             m('h1', 'Welcome to Web Interface of Retroshare!'),
-            'Retroshare is an Open Source Cross-platform,',
-            m('br'),
-            'Private and Secure Decentralized Communication Platform.',
+            m('.info', [
+              m('h4', 'Retroshare is an Open Source Cross-platform,'),
+              m('h4', 'Private and Secure Decentralized Communication Platform.'),
+            ]),
           ]),
           m('.certificate__content', [
             m('.rsId', [
