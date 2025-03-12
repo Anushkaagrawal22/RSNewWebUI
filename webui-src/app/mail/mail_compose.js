@@ -26,6 +26,7 @@ const Layout = () => {
         sendList: [],
       },
     },
+showContacts: false,
   };
   async function loadMailUserDetails(msgType, senderId, recipientList) {
     Data.allUsers = await peopleUtil.sortUsers(rs.userList.users);
@@ -253,10 +254,34 @@ const Layout = () => {
           m('.compose-mail__message', [
             m('.compose-mail__message-body[placeholder=Message][contenteditable]#composerMailBody'),
           ]),
+m('.compose-mail__actions', [
           m('button.compose-mail__send-btn', { onclick: sendMail }, [
             m('span', 'Send Mail'),
             m('i.fas.fa-paper-plane'),
           ]),
+m('button.compose-mail__contacts-btn', {
+              onclick: () => {
+                Data.showContacts = !Data.showContacts;
+              },
+              title: 'Contacts', // Add title for tooltip
+            }, [
+              m('img', { src: 'https://cdn-icons-png.flaticon.com/512/8673/8673842.png', alt: 'Contacts', height: '16px', width: '20px' }),
+            ]),
+          ]),
+          Data.showContacts &&
+            m('.contacts-list', [
+              m('h4', 'Contacts'),
+              m('ul', [
+                Data.allUsers.map((user) =>
+                  m('li', {
+                    onclick: () => {
+                      Data.recipients.to.sendList.push(user);
+                      Data.showContacts = false;
+                    },
+                  }, user.mGroupName)
+                ),
+              ]),
+            ]),
         ]),
       ]);
     },

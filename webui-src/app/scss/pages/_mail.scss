@@ -109,10 +109,45 @@
       outline: transparent;
     }
   }
-  &__send-btn {
+  &__actions {
     @include flex($align: center, $gap: 0.5rem);
     & i {
       transform: translateY(-1px);
+    }
+  }
+  &__send-btn {
+    display: inline;
+  }
+  &__contacts-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    & img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.contacts-list {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid $light-color;
+  border-radius: 4px;
+  background: white;
+  & h4 {
+    margin-bottom: 0.5rem;
+  }
+  & ul {
+    list-style: none;
+    padding: 0;
+    & li {
+      padding: 0.5rem;
+      cursor: pointer;
+      &:hover {
+        background: $light-color;
+      }
     }
   }
 }
